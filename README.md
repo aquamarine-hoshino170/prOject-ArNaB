@@ -1,51 +1,32 @@
-# Project Arnab: Edge-Computing Tropical Cyclone Diagnostic Pipeline
-**NASA International Space Apps Challenge 2026**
+# Project Arnab: High-Performance Tropical Cyclone Dynamics & Impact Engine
 
-[![Architecture](https://img.shields.io/badge/Architecture-Pure%20Edge%20(Termux)-blue.svg)](#)
-[![Math Engine](https://img.shields.io/badge/Core-NumPy%20%7C%20SciPy-brightgreen.svg)](#)
-[![Zero Cloud](https://img.shields.io/badge/Cloud%20Dependency-0%25-red.svg)](#)
-
-Project Arnab is an edge-native tropical cyclone intensity, kinematic field, and hydrodynamic surge modeling pipeline built to run entirely on low-power mobile devices (Android Termux) without external cloud server compute.
-
-![Telemetry Map](assets/telemetry_map.png)
+Project Arnab is a physics-based, numerical predictive modeling pipeline designed for tropical cyclone tracking, Holland wind-field decomposition, hydro-meteorological storm surge estimation, and satellite precipitation mapping across the North Indian Ocean basin.
 
 ---
 
-## Key Scientific Modules
+## 🔬 Validation Protocol & Evidence Base
 
-1. **Holland Wind-Pressure Dynamics:**
-   Calculates radial pressure $P(r)$ and cyclostrophic gradient wind velocities $V(r)$ using the Holland model integrated with real-time Coriolis acceleration ($f = 2\Omega\sin\phi$).
-   
-2. **Critical Wind Radii Buffering:**
-   Extracts exact operational danger boundaries ($R_{34}$, $R_{50}$, $R_{64}$) and projects spherical geodesic circles on EPSG:4326 using pure spherical trigonometry without heavy GIS dependencies.
+> **Scientific Boundary & Context:**  
+> The quantitative evaluations presented herein are explicitly derived from the **Super Cyclonic Storm Amphan (May 2020)** historical benchmark in the Bay of Bengal. Reference comparisons against NOAA IBTrACS, IMD Best Track, GPM IMERG, and INCOIS/IIT-Delhi datasets demonstrate component feasibility; **these metrics do not claim universal generalization across all oceanic basins or differing mesoscale synoptic regimes.**
 
-3. **Accumulated Cyclone Energy (ACE) Engine:**
-   Tracks integrated kinetic release metric:
-   $$\text{ACE} = 10^{-4} \sum V_{max}^2 \quad (\text{for } V_{max} \ge 35\text{ kts})$$
+### Component Evaluation Summary (Amphan 2020 Benchmark)
 
-4. **Hydrodynamic Storm Surge Estimation:**
-   Couples the **Inverse Barometer Effect** ($\eta_{ib} = \frac{\Delta P}{\rho_w g}$) with coastal **Wind Stress Set-up** ($\tau_w = \rho_a C_d V^2$) parameterized for the shallow shelf of the Bay of Bengal.
+| Engine / Component | Evaluation Status | Benchmark Metric | Reference Source |
+| :--- | :--- | :--- | :--- |
+| **Track Dynamics** | Evaluated against observation | Mean Track Error: `21.3 km` (Peak: `25.8 km`) | NOAA IBTrACS / IMD |
+| **Intensity Modeling** | Evaluated against observation | Pressure Error: `+4.4 hPa` \| Wind Error: `-5.4 kt` | IMD Best Track |
+| **Storm Surge ($\eta_{total}$)** | Evaluated against observation | Total Surge Error: `-0.18 m` (~3.29 m modeled vs 3.47 m ref) | INCOIS / IIT Delhi |
+| **Precipitation Engine** | Evaluated with residual bias | Overall RMSE: `2.95 mm` \| Kolkata local bias: `-11.24 mm` | NASA GPM IMERG |
 
 ---
 
-## Directory Structure
+## 🌧️ Precipitation Anomaly Diagnostic Note
+Initial pre-patch runs exhibited a localized urban over-accumulation artifact over Kolkata (+140.13 mm local bias). Root-cause analysis traced this to un-dampened convective feedback and accumulation scaling during coastal boundary transition. Application of aerodynamic boundary-layer dampening reduced this local bias to -11.24 mm. The full diagnostic trail is documented in [`docs/assumptions.md`](docs/assumptions.md).
 
-```text
-project-arnab/
-├── assets/
-│   └── telemetry_map.png          # High-resolution output map
-├── core/
-│   └── engine.py                  # Pure NumPy diagnostic pipeline
-├── requirements.txt               # Lightweight edge dependencies
-└── README.md                      # Technical documentation
-Edge Execution
-# Clone the repository
-git clone [https://github.com/](https://github.com/)<your-username>/project-arnab.git
-cd project-arnab
+---
 
-# Install minimal dependencies
-pip install numpy matplotlib
-
-# Execute pipeline
-python core/engine.py
-Built for extreme reliability in disaster management where network access and cloud compute are compromised.
+## 📂 Repository Hierarchy
+* `core/`: Atmospheric and hydrodynamic physics modules.
+* `validation/`: Independent evaluation testbeds, scripts, and numerical artifacts (`results/`).
+* `docs/`: NASA data provenance (`data_sources.md`), scientific assumptions (`assumptions.md`), and numerical methodology (`methodology.md`).
+* `assets/`: Generated spatial maps and validation diagnostics.

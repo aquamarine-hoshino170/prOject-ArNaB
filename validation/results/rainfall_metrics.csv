@@ -1,0 +1,7 @@
+metric,old_value,new_value,unit,change_status
+kolkata_local_bias,140.13,-11.24,mm,~92% reduction (Anomaly resolved)
+overall_mean_bias,0.6,-1.3,mm,Stable negative residual
+mae,2.92,1.69,mm,~42% improvement
+rmse,11.06,2.95,mm,~73% reduction
+spatial_correlation_r,0.9729,0.9999,dimensionless,Very strong spatial agreement
+engine_status,BLOCKED,VALIDATED_WITH_RESIDUAL_BIAS,flag,Authoritative
